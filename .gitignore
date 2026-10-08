@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.py[cod]
+
+# Virtual environment
+venv/
+.venv/
+
+# Environment
+.env
+
+# Uploaded files
+storage/uploads/*
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+
+# Test/cache
+.pytest_cache/
+
+# Alembic
+# Keep migrations tracked
