@@ -2,6 +2,7 @@ import uuid
 from pathlib import Path
 from fastapi import UploadFile, HTTPException, status
 from sqlalchemy.orm import Session
+from app.workers.tasks import process_geospatial_file
 
 from app.config.config import settings
 from app.repositories.file_repository import FileRepository
@@ -12,6 +13,27 @@ class FileService:
 
     def __init__(self):
         self.file_repository = FileRepository()
+    def get_file(
+        self,
+        db: Session,
+        file_id: int
+    ):
+
+        file_info = (
+            self.file_repository.get_by_id(
+                db,
+                file_id
+            )
+        )
+
+        if file_info is None:
+
+            raise HTTPException(
+                status_code=404,
+                detail="File not found"
+            )
+
+        return file_info
 
     async def upload_file(
         self,
@@ -54,6 +76,7 @@ class FileService:
                 filename=original_filename,
                 file_path=storage_path.as_posix()
             )
+            process_geospatial_file.delay(file_info.id)
             return file_info
 
         except Exception as err:
@@ -67,3 +90,4 @@ class FileService:
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 detail=f"Failed to process file upload: {str(err)}"
             )
+        

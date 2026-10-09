@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from sqlalchemy import DateTime, String
+from sqlalchemy import DateTime, Integer, String
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.db.database import Base
@@ -28,6 +28,21 @@ class FileInfo(Base):
         String(20),
         nullable=False,
         default="PENDING"
+    )
+
+    source_crs: Mapped[str | None] = mapped_column(
+        String(50),
+        nullable=True
+    )
+
+    feature_count: Mapped[int | None] = mapped_column(
+        Integer,
+        nullable=True
+    )
+    
+    error_message: Mapped[str | None] = mapped_column(
+        String(1000),
+        nullable=True
     )
 
     created_at: Mapped[datetime] = mapped_column(

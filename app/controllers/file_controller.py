@@ -8,6 +8,12 @@ class FileController:
 
     def __init__(self):
         self.file_service = FileService()
+        
+    def get_file(self,db: Session,file_id: int):
+        return self.file_service.get_file(
+            db=db,
+            file_id=file_id
+        )
 
     async def upload_file(
         self,

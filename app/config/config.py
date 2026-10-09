@@ -6,7 +6,7 @@ class Settings(BaseSettings):
     app_version: str = "1.0.0"
 
     database_url: str
-
+    redis_url:str
     upload_dir: str = "storage/uploads"
 
     model_config = SettingsConfigDict(
